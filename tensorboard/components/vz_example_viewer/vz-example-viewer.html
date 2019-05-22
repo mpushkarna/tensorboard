@@ -331,7 +331,9 @@ limitations under the License.
       }
 
       paper-dialog {
-        border-radius: 10px;
+        border-radius: 8px;
+        background: yellow;
+        padding: 12px;
       }
 
       .control-button {
@@ -698,7 +700,7 @@ limitations under the License.
         data-seq-num="[[focusedSeqNumber]]" on-click="deleteValue" title="Delete value">
     </paper-icon-button>
     <paper-dialog id="addFeatureDialog">
-      <h2>Add Feature</h2>
+      <h2>Add a new feature</h2>
       <paper-input label="Feature name" value="{{newFeatureName}}"></paper-input>
       <paper-radio-group selected="{{newFeatureType}}">
         <paper-radio-button name="int">Int</paper-radio-button>
@@ -707,7 +709,7 @@ limitations under the License.
       </paper-radio-group>
       <paper-button dialog-dismiss class="control-button" on-click="addFeature"
                     disabled="[[!shouldEnableAddFeature(newFeatureName)]]">
-        Create
+        Add
       </paper-button>
     </paper-dialog>
   </template>

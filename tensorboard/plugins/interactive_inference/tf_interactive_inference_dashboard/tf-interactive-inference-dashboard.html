@@ -232,7 +232,7 @@ limitations under the License.
         width: 40%;
         max-width: 40%;
         overflow-y: auto;
-        border-radius: 10px;
+        border-radius: 4px;
       }
 
       .dashboard-layout {
@@ -648,7 +648,7 @@ limitations under the License.
       .main-content {
         height: 100%;
       }
-
+/* in similarity dialog */
       .dist-switch {
         display: flex;
         margin-top: 0;
@@ -887,6 +887,7 @@ limitations under the License.
       .dialog-text {
         font-style: normal;
         text-align: left;
+        border: #DADCE0 solid 1px;
       }
 
       .dialog-title {
@@ -944,8 +945,10 @@ limitations under the License.
 
       paper-dialog {
         color: #3C4043;
-        border-radius: 10px;
-        max-width: 600px;
+        border-radius: 4px;
+        max-width: 400px;
+        max-height: none;
+        border: solid 1px #DADCE0;
       }
 
       .main-button.run-button {
@@ -1120,14 +1123,18 @@ limitations under the License.
         display: flex;
         flex-direction: row-reverse;
       }
-      .counterfactual-toggle {
+
+      .counterfactual-controls {
+        height: 24px;
         margin: 4px 4px 4px 6px;
+      }
+      .counterfactual-toggle {
         --paper-toggle-button-checked-bar-color: #81C995;
       }
-      .datapoint-button {
+      /* .datapoint-button {
         color: #202124;
         background: #FDE293;
-      }
+      } */
       .infer-button {
         color: white;
         background: #128EAF;
@@ -1213,33 +1220,35 @@ limitations under the License.
       </div>
     </paper-dialog>
     <paper-dialog id="deletedialog">
-      <p>Are you sure you want to delete the selected datapoint?</p>
+      <h2> Delete this datapoint? </h2>
+      <p>This action cannot be undone. To recover this datapoint, you'll have to re-load your dataset. </p>
       <div class="buttons">
         <paper-button dialog-dismiss class="control-button">Cancel</paper-button>
         <paper-button dialog-confirm autofocus on-tap="deleteDatapoint_" class="main-button">Delete</paper-button>
       </div>
     </paper-dialog>
     <paper-dialog id="distancedialog">
-      <h2>Show similarity to selected datapoint</h2>
-      <paper-input value="{{facetDistFeatureName}}" label="Metric name" class="datapoint-control-filter-input">
+      <h2>Datapoint similarity</h2>
+      <p>Creates a feature of similarlity from all loaded datapoints to the selected datapoint. Customize and visualize similarity below.</p>
+      <paper-input value="{{facetDistFeatureName}}" label="Custom name" class="datapoint-control-filter-input">
       </paper-input>
       <div class="radiolabel">Distance type</div>
       <paper-radio-group class="dist-switch" selected="{{facetDistSwitch}}">
         <paper-radio-button class="dist-radio" name="L1">L1</paper-radio-button>
         <paper-radio-button class="dist-radio" name="L2">L2</paper-radio-button>
       </paper-radio-group>
-      <paper-dropdown-menu label="Apply to datapoints visualization" class="threshold-dropdown distance-vis-dropdown">
+      <paper-dropdown-menu label="Apply to visualization" class="threshold-dropdown distance-vis-dropdown">
         <paper-listbox class="dropdown-content" selected="{{facetDistSetting}}" attr-for-selected="name">
           <paper-item name="colorBy">Color By</paper-item>
-          <paper-item name="horizontalFacet">X-Axis Binning</paper-item>
-          <paper-item name="verticalFacet">Y-Axis Binning</paper-item>
-          <paper-item name="horizontalPosition">X-Axis Scatter</paper-item>
-          <paper-item name="verticalPosition">Y-Axis Scatter</paper-item>
+          <paper-item name="horizontalFacet">Bin on X-axis</paper-item>
+          <paper-item name="verticalFacet">Bin on Y-axis</paper-item>
+          <paper-item name="horizontalPosition">Scatter along X-axis</paper-item>
+          <paper-item name="verticalPosition">Scatter along Y-axis</paper-item>
         </paper-listbox>
       </paper-dropdown-menu>
       <div class="buttons">
         <paper-button dialog-dismiss class="control-button">Cancel</paper-button>
-        <paper-button dialog-confirm autofocus on-tap="addDistanceMetric" class="main-button">Apply</paper-button>
+        <paper-button dialog-confirm autofocus on-tap="addDistanceMetric" class="main-button">Create</paper-button>
       </div>
     </paper-dialog>
     <div class="dashboard-layout">
@@ -1275,27 +1284,28 @@ limitations under the License.
                       </button>
                       <iron-collapse class="no-padding-card" id="collapsecontexttools" opened="{{openedContextTools}}">
                         <paper-radio-group selected="{{visMode}}">
-                          <paper-radio-button name="dive">Datapoints</paper-radio-button>
-                          <paper-radio-button name="pd">Partial dependence plots</paper-radio-button>
+                          <paper-radio-button name="dive" title="Visualizes loaded datapoints in Facets Dive">Datapoints</paper-radio-button>
+                          <paper-radio-button name="pd" title="Shows partial dependence plots for all features">Partial dependence plots</paper-radio-button>
                         </paper-radio-group>
                         <template is="dom-if" if="[[!isRegression_(modelType)]]">
-                          <div class="flex">
+                          <div class="flex counterfactual-controls">
                             <div title="Select a datapoint to use this feature">
                               <paper-toggle-button class="counterfactual-toggle"
+                              title ="Shows nearest counterfactual for a selected datapoint"
                                   checked="{{showNearestCounterfactual}}"
                                   disabled$="[[!hasSelected(selectedExampleAndInference)]]">
                                 Show nearest counterfactual datapoint
                               </paper-toggle-button>
                             </div>
                             <paper-radio-group selected="{{nearestCounterfactualDist}}">
-                              <paper-radio-button name="L1">L1</paper-radio-button>
-                              <paper-radio-button name="L2">L2</paper-radio-button>
+                              <paper-radio-button name="L1" title="Use L1 distance to compute counterfactual">L1</paper-radio-button>
+                              <paper-radio-button name="L2" title="Use L2 distance to compute counterfactual">L2</paper-radio-button>
                             </paper-radio-group>
                             <paper-icon-button icon="info-outline" class="info-icon cf-info-icon no-padding" on-tap="openDialog">
                             </paper-icon-button>
                             <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
-                              <div class="dialog-title">Nearest counterfactual (neighbor of different classification)</div>
-                              <div>Compares the selected datapoint with its nearest neighbor from a different classification using L1 or L2 distance.</div>
+                              <div class="dialog-title">Nearest counterfactual</div>
+                              <div>Compare the selected datapoint with its <b>nearest neighbor from a different classification</b> using L1 or L2 distance.</div>
                             </paper-dialog>
                           </div>
                         </template>
@@ -1304,15 +1314,15 @@ limitations under the License.
                             <paper-button class="control-button datapoint-button" disabled$="[[!hasSelected(selectedExampleAndInference)]]"
                                 on-tap="showDistanceClicked_" alt="Show similarity to selected datapoint"
                                 title="Show similarity to selected datapoint">
-                                Show similarity to selected datapoint
+                                Datapoint Similarity
                             </paper-button>
                             <paper-icon-button icon="info-outline" class="info-icon cf-info-icon no-padding" on-tap="openDialog">
                             </paper-icon-button>
                             <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
-                              <div class="dialog-title">Show similarity to selected datapoint</div>
-                              <div>
-                                Calculates the distance between the selected datapoint and all other datapoints and shows this
-                                in the datapoints visualization.
+                              <div class="dialog-title"><h2>Datapoint Similarity</h2></div>
+                              <div class="dialog-content">
+                                <p>Calculates the distance between a selected datapoint and all other datapoints, and applies the similarity to the datapoints visualization. 
+                                  This feature is customizable</p>
                               </div>
                             </paper-dialog>
                           </div>
@@ -1556,10 +1566,8 @@ limitations under the License.
                                 <div>The feature that your model is trying to predict.
                                   <span class="dialog-link" on-tap="openDialog">More.
                                     <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
-                                      <div class="dialog-title">Ground Truth Feature</div>
-                                      <div>If the datapoints contain a feature that represents the ground truth for what the model is attempting
-                                        to predict, then selecting that feature here allows the tool to investigate the performance of
-                                        the model by comparing the model's results to the ground truth feature.
+                                      <div class="dialog-title">Specify a ground truth feature.</div>
+                                      <div>Specifying a feature in the dataset that represents the ground truth for what the model is predicting will let us compare the model's results to the ground truth feature.
                                       </div>
                                     </paper-dialog>
                                   </span>
@@ -1579,11 +1587,11 @@ limitations under the License.
                                   <div>The cost of false positives relative to false negatives. Required for optimization.
                                     <span class="dialog-link" on-tap="openDialog">More.
                                       <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
-                                        <div class="dialog-title">What is cost ratio?</div>
-                                        <div>This tells the tool how to optimize the classification thresholds when you use the optimization strategy controls.</div>
-                                        <div>1.00 = false positives are equally as costly as false negatives.</div>
-                                        <div>4.00 = false positives are 4 times more costly than false negatives</div>
-                                        <div>0.25 = false negatives are 4 times more costly than false positives.</div>
+                                        <div class="dialog-title">Specify a cost ratio.</div>
+                                        <div>This will tell us how to optimize classification thresholds when you use any available optimization strategies.</div>
+                                        <div><b>1.00</b> False positives are equally as costly as false negatives</div>
+                                        <div><b>4.00</b> False positives are 4 times more costly than false negatives</div>
+                                        <div><b>0.25</b> False negatives are 4 times more costly than false positives</div>
                                       </paper-dialog>
                                     </span>
                                   </div>
@@ -1603,7 +1611,7 @@ limitations under the License.
                               <div>
                                 <div class="help-title help-title-margin">What does slicing do?</div>
                                 <div class="help-text">
-                                  <div>Shows performance for each value of the selected feature.</div>
+                                  <div>Shows performance for each unique value of the specified feature.</div>
                                 </div>
                               </div>
                             </div>
@@ -1632,80 +1640,69 @@ limitations under the License.
                         <iron-collapse class="card" id="collapseexplorer" opened="{{openedExplorer}}">
                           <template is="dom-if" if="[[shouldShowFeatureDropdown_(stats)]]">
                             <div class="control-info-header help-title-margin-button">Apply an optimization strategy</div>
-                            <div class="control-info-text">Select a strategy to set classification thresholds based on the set cost ratio and data slices.
+                            <div class="control-info-text">Select a strategy to set classification thresholds based on the specified cost ratio and data slices.
                               Manually altering thresholds or changing cost ratio will default back to custom thresholds.
                             </div>
                             <paper-radio-group class="optimization-radio-group" selected="{{optimizationSelected}}">
-                              <paper-radio-button name="custom" class="optimization-radio" id="customthresh">Custom thresholds
+                              <paper-radio-button name="custom" class="optimization-radio" id="customthresh" title="Customize threholds individually">Custom thresholds
                                 <paper-icon-button icon="info-outline" class="info-icon thresh-info-icon no-padding" on-tap="openDialog">
                                 </paper-icon-button>
                                 <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="bottom">
                                   <div class="dialog-title">Custom thresholds</div>
                                   <div>
-                                    Set your own thresholds using the threshold sliders.
+                                    Defaults to 0.5. Use this to custom thresholds for each slice individually using the sliders.<br>Ideal for custom optimization and exploration.
                                   </div>
                                 </paper-dialog>
                               </paper-radio-button>
-                              <paper-radio-button name="unaware" class="optimization-radio">Single threshold
+                              <paper-radio-button name="unaware" class="optimization-radio" title="Optimizes across all datapoints">Single threshold
                                 <paper-icon-button icon="info-outline" class="info-icon thresh-info-icon no-padding" on-tap="openDialog">
                                 </paper-icon-button>
                                 <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="bottom">
                                   <div class="dialog-title">Single threshold</div>
                                   <div>
-                                    Optimize a single threshold for all datapoints based on the specified cost ratio.
+                                    Optimize a single threshold for <i>all</i> datapoints based on the specified cost ratio. <br> Ideal for evaluating imbalance in performance across slices.
                                   </div>
                                 </paper-dialog>
                               </paper-radio-button>
-                              <paper-radio-button name="demoparity" class="optimization-radio" disabled$="[[!shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]">Demographic parity
+                              <paper-radio-button name="demoparity" class="optimization-radio" disabled$="[[!shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]" title="Similar percentage of positive predictions across all slices">Demographic parity
                                 <paper-icon-button icon="info-outline" class="info-icon thresh-info-icon no-padding" on-tap="openDialog">
                                 </paper-icon-button>
                                 <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="bottom">
                                   <div class="dialog-title">Demographic parity</div>
                                   <div>
-                                    Optimize a threshold per slice based on the specified cost ratio, ensuring the different slices achieve
-                                    demographic party.
-                                  </div>
-                                  <div>
-                                    Demographic parity means that similar percentages of datapoints from each slice are predicted as positive classifications.
+                                    Optimizes thresholds per slice based on the specified cost ratio for <a href="https://research.google.com/bigpicture/attacking-discrimination-in-ml/" target="_blank">demographic parity</a>.
+                                    <br>Ideal for ensuring that similar percentages of datapoints from each slice are predicted as positive classifications.
                                   </div>
                                 </paper-dialog>
                               </paper-radio-button>
-                              <paper-radio-button name="equalopp" class="optimization-radio" disabled$="[[!shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]">Equal opportunity
+                              <paper-radio-button name="equalopp" class="optimization-radio" disabled$="[[!shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]" title="Similar percentage of correct predictions among those predicted positive across all slices.">Equal opportunity
                                 <paper-icon-button icon="info-outline" class="info-icon thresh-info-icon no-padding" on-tap="openDialog">
                                 </paper-icon-button>
                                 <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="bottom">
                                   <div class="dialog-title">Equal opportunity</div>
                                   <div>
-                                    Optimize a threshold per slice based on the specified cost ratio, ensuring the different slices achieve
-                                    equal opportunity.
-                                  </div>
-                                  <div>
-                                    Equal opportunity means that among those predicted as positive classifications, there is a similar percentage of
-                                    correct predictions in each slice.
+                                    Optimizes thresholds per slice based on the specified cost ratio for <a href="https://research.google.com/bigpicture/attacking-discrimination-in-ml/" target="_blank">equal opportunity</a>.
+                                    <br>Ideal for ensuring that among those predicted as positive classifications, there are a similar percentage of correct predictions in each slice.
                                   </div>
                                 </paper-dialog>
                               </paper-radio-button>
-                              <paper-radio-button name="equalacc" class="optimization-radio" disabled$="[[!shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]">Equal accuracy
+                              <paper-radio-button name="equalacc" class="optimization-radio" disabled$="[[!shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]" title="Similar percentage of correct predictions across all slices.">Equal accuracy
                                 <paper-icon-button icon="info-outline" class="info-icon thresh-info-icon no-padding" on-tap="openDialog">
                                 </paper-icon-button>
                                 <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="bottom">
                                   <div class="dialog-title">Equal accuracy</div>
                                   <div>
-                                    Optimize a threshold per slice based on the specified cost ratio, ensuring the different slices achieve
-                                    equal accuracy.
-                                  </div>
-                                  <div>
-                                    Equal accuracy means that there is a similar percentage of correct predictions in each slice.
+                                    Optimizes thresholds per slice based on the specified cost ratio for equal accuracy. <br> Ideal for ensuring that there is a similar percentage of correct predictions in each slice.
                                   </div>
                                 </paper-dialog>
                               </paper-radio-button>
-                              <paper-radio-button name="group" class="optimization-radio" disabled$="[[!shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]">Group thresholds
+                              <paper-radio-button name="group" class="optimization-radio" disabled$="[[!shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]" title="Each threhold is optimized for the associated slice.">Group thresholds
                                 <paper-icon-button icon="info-outline" class="info-icon thresh-info-icon no-padding" on-tap="openDialog">
                                 </paper-icon-button>
                                 <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="bottom">
                                   <div class="dialog-title">Group thresholds</div>
                                   <div>
-                                    Optimize a separate threshold for each slice based on the specified cost ratio.
+                                    Optimizes separate thresholds for datapoints per slice individually, based on the specified cost ratio.
                                   </div>
                                 </paper-dialog>
                               </paper-radio-button>
