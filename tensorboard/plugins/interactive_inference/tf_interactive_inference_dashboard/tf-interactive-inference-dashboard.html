@@ -1283,13 +1283,14 @@
     <paper-radio-button class="dist-radio" name="L1">L1</paper-radio-button>
     <paper-radio-button class="dist-radio" name="L2">L2</paper-radio-button>
   </paper-radio-group>
-  <paper-dropdown-menu label="Apply to visualization" class="threshold-dropdown distance-vis-dropdown">
+  <paper-dropdown-menu label="Visualize as" title="Specify visualization of similarity"
+  class="threshold-dropdown distance-vis-dropdown">
     <paper-listbox class="dropdown-content" selected="{{facetDistSetting}}" attr-for-selected="name">
-      <paper-item name="colorBy">Color By</paper-item>
-      <paper-item name="horizontalFacet">Bin on X-axis</paper-item>
-      <paper-item name="verticalFacet">Bin on Y-axis</paper-item>
-      <paper-item name="horizontalPosition">Scatter along X-axis</paper-item>
-      <paper-item name="verticalPosition">Scatter along Y-axis</paper-item>
+      <paper-item name="colorBy">Colored By</paper-item>
+      <paper-item name="horizontalFacet">Bins on X-axis</paper-item>
+      <paper-item name="verticalFacet">Bins on Y-axis</paper-item>
+      <paper-item name="horizontalPosition">Scattered along X-axis</paper-item>
+      <paper-item name="verticalPosition">Scattered along Y-axis</paper-item>
     </paper-listbox>
   </paper-dropdown-menu>
   <div class="buttons">
@@ -1352,7 +1353,9 @@
                 </div>
                 <div class="flex counterfactual-configure">
                   <div class="model-selection">
-                    <paper-dropdown-menu label="Dinosaur Mods" class="threshold-dropdown">
+                    <paper-dropdown-menu label="Dinosaur Mods" 
+                    title="Specify which model to show counterfactual for"
+                    class="threshold-dropdown">
                       <paper-listbox slot="dropdown-content" class="dropdown-content" selected="1">
                         <paper-item>allosaurus</paper-item>
                         <paper-item>brontosaurus</paper-item>
@@ -1618,7 +1621,7 @@
       <iron-collapse class="card" id="collapsetruelabel" opened="{{openedTrueLabel}}">
         <template is="dom-if" if="[[shouldShowLabelDropdown_(stats)]]">
           <div class="flex">
-            <paper-dropdown-menu label="Ground Truth Feature" class="threshold-dropdown">
+            <paper-dropdown-menu label="Ground Truth Feature" title="Sets a feature as ground truth" class="threshold-dropdown">
               <paper-listbox class="dropdown-content" selected="{{selectedLabelFeature}}" attr-for-selected="name">
                 <template is="dom-repeat" items="[[getFeatureList_(stats)]]">
                   <paper-item name="[[item]]">[[getFeatureName_(item)]]</paper-item>
@@ -1644,6 +1647,7 @@
             <div class="flex">
               <paper-input value="{{incorrectPredCostRatio}}"
               label="Cost Ratio (FP/FN)"
+              title="Sets a cost ratio for optimization"
               type="number" class="threshold-cost-input">
             </paper-input>
             <div>
@@ -1666,7 +1670,7 @@
         </template>
         <template is="dom-if" if="[[shouldShowFeatureDropdown_(stats)]]">
           <div class="flex">
-            <paper-dropdown-menu label="Slice by" class="threshold-dropdown">
+            <paper-dropdown-menu label="Slice by" title="Specifies a feature to create slices" class="threshold-dropdown">
               <paper-listbox class="dropdown-content" selected="{{selectedBreakdownFeature}}" attr-for-selected="name">
                 <template is="dom-repeat" items="[[getFeatureList_(stats)]]">
                   <paper-item name="[[item]]">[[getFeatureName_(item)]]</paper-item>
@@ -1676,13 +1680,13 @@
             <div>
               <div class="help-title help-title-margin">What does slicing do?</div>
               <div class="help-text">
-                <div>Shows performance for each unique value of the specified feature.</div>
+                <div>Shows performance for each unique value (or slice) of the specified feature.</div>
               </div>
             </div>
           </div>
           <div class="flex">
             <template is="dom-if" if="[[shouldShowSecondFeatureDropdown_(selectedBreakdownFeature)]]">
-              <paper-dropdown-menu label="Slice by (secondary)" class="threshold-dropdown">
+              <paper-dropdown-menu label="Slice by (secondary)" title="Specifies a secondary feature to create cross-slices" class="threshold-dropdown">
                 <paper-listbox class="dropdown-content" selected="{{selectedSecondBreakdownFeature}}" attr-for-selected="name">
                   <template is="dom-repeat" items="[[getFeatureList_(stats)]]">
                     <paper-item name="[[item]]">[[getFeatureName_(item)]]</paper-item>
@@ -1785,7 +1789,7 @@
         <paper-icon-button icon="info-outline" class="info-icon performance-info-icon no-padding" on-tap="openDialog">
         </paper-icon-button>
         <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
-          <div class="dialog-title">Classification Performance Table</div>
+          <div class="dialog-title" title="Explore model performance on slices of loaded data">Classification Performance Table</div>
           <div>Set the ground truth feature to explore model performance including ROC curves and confusion matrices.</div>
           <div>Slice the dataset by features and explore model performance by slice.</div>
           <div>Use the fairness optimization strategies and see the impact on the thresholds and performance of the individual slices.</div>
@@ -1800,7 +1804,7 @@
         alt="collapse all slices" title="Collapse all slices">
       </paper-icon-button>
     </div>
-    <paper-dropdown-menu label="Sort by" class="threshold-dropdown perf-table-sort-menu">
+    <paper-dropdown-menu label="Sort by" title="Sort slices" class="threshold-dropdown perf-table-sort-menu">
       <paper-listbox class="dropdown-content" selected="{{selectedFeatureSort}}" attr-for-selected="name">
         <template is="dom-repeat" items="[[getFeatureSortBy(modelType, multiClass)]]">
           <paper-item name="[[item]]">[[item]]</paper-item>
@@ -1810,19 +1814,19 @@
   </div>
 </div>
 <div class="perf-table-header">
-  <div class="perf-table-arrow">
+  <div class="perf-table-arrow" title="Click to expand or collapse">
     <iron-icon class="expand-collapse-button"></iron-icon>
   </div>
-  <div class="perf-table-val">Feature Value</div>
-  <div class="perf-table-count">Count</div>
-  <div class$="[[getPerfTableModelClass(numModels)]]">Model</div>
+  <div class="perf-table-val" title="Feature or Slice Value">Feature Value</div>
+  <div class="perf-table-count" title="Number of examples in slice">Count</div>
+  <div class$="[[getPerfTableModelClass(numModels)]]" title="Model Description">Model</div>
   <div class="perf-table-threshold flex">
     <div>Threshold</div>
-    <div class="threshold-info-holder">
+    <div class="threshold-info-holder" title="positive classification threhold value">
       <paper-icon-button icon="info-outline" class="info-icon threshold-info-icon no-padding" on-tap="openDialog">
       </paper-icon-button>
       <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
-        <div class="dialog-title">Exploring Classification Performance</div>
+        <div class="dialog-title">Explore Classification Performance</div>
         <div>Use this slider to adjust the classification threshold for this slice. Inference values at or
           above this threshold are considered a positive classification, while inference values below this
           threshold are considered a negative classification.
@@ -1830,42 +1834,42 @@
       </paper-dialog>
     </div>
   </div>
-  <div class="perf-table-fp">False Positives (%)</div>
-  <div class="perf-table-fn">False Negatives (%)</div>
-  <div class="perf-table-acc">Accuracy (%)</div>
+  <div class="perf-table-fp" title="Percentage of false positives for slice">False Positives (%)</div>
+  <div class="perf-table-fn" title="Percentage of false negatives for slice">False Negatives (%)</div>
+  <div class="perf-table-acc" title="Accuracy on slice">Accuracy (%)</div>
 </div>
 <div class="perf-table-entries-holder">
   <template is="dom-repeat" items="[[featureValueThresholds]]" as="featureValueThreshold">
     <div class="perf-table-entry">
       <div class$="[[getPerfTableRowClass(featureValueThreshold.opened)]]" data-index$="[[index]]">
         <div class="perf-table-arrow">
-          <paper-icon-button class$="[[getExpandCollapsePerfIconClass(featureValueThreshold.opened)]]" icon="arrow-drop-down" on-tap="togglePerfRow"></paper-icon-button>
+          <paper-icon-button class$="[[getExpandCollapsePerfIconClass(featureValueThreshold.opened)]]" icon="arrow-drop-down" on-tap="togglePerfRow" title="Click to expand or collapse"></paper-icon-button>
         </div>
-        <div class="perf-table-val perf-table-clickable perf-table-text-entry" on-tap="togglePerfRow">[[getPrintableValue_(featureValueThreshold)]]</div>
-        <div class="perf-table-count perf-table-clickable perf-table-num-entry" on-tap="togglePerfRow">[[getFeatureValueCount(inferenceStats_, featureValueThreshold.threshold, featureValueThreshold)]]</div>
-        <div class$="[[getPerfTableModelClass(numModels)]]" on-tap="togglePerfRow">
+        <div class="perf-table-val perf-table-clickable perf-table-text-entry" on-tap="togglePerfRow" title="Feature or Slice Value">[[getPrintableValue_(featureValueThreshold)]]</div>
+        <div class="perf-table-count perf-table-clickable perf-table-num-entry" on-tap="togglePerfRow" title="Number of datapoints in slice">[[getFeatureValueCount(inferenceStats_, featureValueThreshold.threshold, featureValueThreshold)]]</div>
+        <div class$="[[getPerfTableModelClass(numModels)]]" on-tap="togglePerfRow" class="Model Description">
           <template is="dom-repeat" items="{{featureValueThreshold.threshold}}">
             <div class="perf-table-text-entry perf-table-clickable">[[getModelName_(index)]]</div>
           </template>
         </div>
-        <div class="perf-table-threshold">
+        <div class="perf-table-threshold" title="threshold for positive classification">
           <template is="dom-repeat" items="{{featureValueThreshold.threshold}}">
             <paper-slider class$="[[getSliderClass(index)]]" editable=true min="0" max="1" step="0.01" immediate-value="{{item.threshold}}"
             value="[[item.threshold]]" on-value-changed="refreshInferencesNoRegen_" on-down="resetOptimizationSelected_">
           </paper-slider>
         </template>
       </div>
-      <div class="perf-table-fp perf-table-clickable" on-tap="togglePerfRow">
+      <div class="perf-table-fp perf-table-clickable" on-tap="togglePerfRow" title="False Positive % on slice">
         <template is="dom-repeat" items="{{featureValueThreshold.threshold}}">
           <div class="perf-table-num-entry">[[getFPModelIndex(inferenceStats_, featureValueThreshold.threshold, index, featureValueThreshold)]]</div>
         </template>
       </div>
-      <div class="perf-table-fn perf-table-clickable" on-tap="togglePerfRow">
+      <div class="perf-table-fn perf-table-clickable" on-tap="togglePerfRow" title="False Negative % on slice">
         <template is="dom-repeat" items="{{featureValueThreshold.threshold}}">
           <div class="perf-table-num-entry">[[getFNModelIndex(inferenceStats_, featureValueThreshold.threshold, index, featureValueThreshold)]]</div>
         </template>
       </div>
-      <div class="perf-table-acc perf-table-clickable" on-tap="togglePerfRow">
+      <div class="perf-table-acc perf-table-clickable" on-tap="togglePerfRow" title="Accuracy % on slice">
         <template is="dom-repeat" items="{{featureValueThreshold.threshold}}">
           <div class="perf-table-num-entry">[[getAccuracyModelIndex(inferenceStats_, featureValueThreshold.threshold, index, featureValueThreshold)]]</div>
         </template>
@@ -1876,7 +1880,7 @@
     <div class="perf-table-entry-expanded flex-row-reverse">
       <template is="dom-if" if="[[shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]">
         <div class="conf-matrix-holder">
-          <div class="conf-text">Confusion matrix</div>
+          <div class="conf-text" title="Confusion Matrix">Confusion matrix</div>
           <template is="dom-repeat" items="{{featureValueThreshold.threshold}}">
             <tf-confusion-matrix counts="[[getConfusionCountsModelIndex(inferenceStats_, featureValueThreshold.threshold, index, featureValueThreshold)]]"
             label="[[getConfusionMatrixLabel(index, numModels)]]"
@@ -1887,7 +1891,7 @@
         </template>
       </div>
       <div class="roc-holder">
-        <div class="roc-text">ROC curve
+        <div class="roc-text" title="ROC Curve">ROC curve
           <paper-icon-button icon="info-outline" class="info-icon threshold-info-icon no-padding" on-tap="openDialog">
           </paper-icon-button>
           <paper-dialog class="dialog-text" horizontal-align="right" vertical-align="bottom">
@@ -1897,8 +1901,8 @@
             </div>
           </paper-dialog>
         </div>
-        <div class="roc-x-label">False positive rate</div>
-        <div class="roc-y-label">True positive rate</div>
+        <div class="roc-x-label" title="False positive rate">False positive rate</div>
+        <div class="roc-y-label" title="True positive rate">True positive rate</div>
         <vz-line-chart id="[[getPrChartId(index)]]" class="pr-line-chart"
         x-axis-formatter="[[getSimpleAxisFormatter(axisPrecision)]]"
         y-axis-formatter="[[getSimpleAxisFormatter(axisPrecision)]]">
@@ -1914,31 +1918,31 @@
       <div class="perf-table-arrow">
         <paper-icon-button icon="arrow-drop-down" on-tap="togglePerfRow" disabled></paper-icon-button>
       </div>
-      <div class="perf-table-val perf-table-text-entry">All datapoints</div>
+      <div class="perf-table-val perf-table-text-entry" title="All datapoints">All datapoints</div>
       <div class="perf-table-count perf-table-num-entry">[[getFeatureValueCount(inferenceStats_, overallThresholds)]]</div>
       <div class$="[[getPerfTableModelClass(numModels)]]">
         <template is="dom-repeat" items="{{overallThresholds}}">
           <div class="perf-table-text-entry">[[getModelName_(index)]]</div>
         </template>
       </div>
-      <div class="perf-table-threshold">
+      <div class="perf-table-threshold" title="Thresholds">
         <template is="dom-repeat" items="{{overallThresholds}}">
           <paper-slider class$="[[getSliderClass(index)]]" editable=true min="0" max="1" step="0.01" immediate-value="{{item.threshold}}"
           value="[[item.threshold]]" on-value-changed="refreshInferencesNoRegen_" on-down="resetOptimizationSelected_">
         </paper-slider>
       </template>
     </div>
-    <div class="perf-table-fp">
+    <div class="perf-table-fp" title="False Positive %">
       <template is="dom-repeat" items="{{overallThresholds}}">
         <div class="perf-table-num-entry">[[getFPModelIndex(inferenceStats_, overallThresholds, index)]]</div>
       </template>
     </div>
-    <div class="perf-table-fn">
+    <div class="perf-table-fn" title="False Negative %">
       <template is="dom-repeat" items="{{overallThresholds}}">
         <div class="perf-table-num-entry">[[getFNModelIndex(inferenceStats_, overallThresholds, index)]]</div>
       </template>
     </div>
-    <div class="perf-table-acc">
+    <div class="perf-table-acc" title="Accuracy %">
       <template is="dom-repeat" items="{{overallThresholds}}">
         <div class="perf-table-num-entry">[[getAccuracyModelIndex(inferenceStats_, overallThresholds, index)]]</div>
       </template>
@@ -1948,7 +1952,7 @@
 <div class="perf-table-entry-expanded flex-row-reverse">
   <template is="dom-if" if="[[shouldShowOverallPrChart_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]">
     <div class="conf-matrix-holder">
-      <div class="conf-text">Confusion matrix</div>
+      <div class="conf-text" title="Confusion Matrix">Confusion matrix</div>
       <template is="dom-repeat" items="{{overallThresholds}}">
         <tf-confusion-matrix counts="[[getConfusionCountsModelIndex(inferenceStats_, overallThresholds, index)]]"
         label="[[getConfusionMatrixLabel(index, numModels)]]"
@@ -1959,7 +1963,7 @@
     </template>
   </div>
   <div class="roc-holder">
-    <div class="roc-text">ROC curve
+    <div class="roc-text" title="ROC Curve">ROC curve
       <paper-icon-button icon="info-outline" class="info-icon threshold-info-icon no-padding" on-tap="openDialog">
       </paper-icon-button>
       <paper-dialog class="dialog-text" horizontal-align="right" vertical-align="bottom">
@@ -1969,8 +1973,8 @@
         </div>
       </paper-dialog>
     </div>
-    <div class="roc-x-label">False positive rate</div>
-    <div class="roc-y-label">True positive rate</div>
+    <div class="roc-x-label" title="False positive rate">False positive rate</div>
+    <div class="roc-y-label" title="True positive rate">True positive rate</div>
     <vz-line-chart id="prchart" class="pr-line-chart"
     x-axis-formatter="[[getSimpleAxisFormatter(axisPrecision)]]"
     y-axis-formatter="[[getSimpleAxisFormatter(axisPrecision)]]">
@@ -2002,7 +2006,7 @@
       alt="collapse all slices" title="Collapse all slices">
     </paper-icon-button>
   </div>
-  <paper-dropdown-menu label="Sort by" class="threshold-dropdown perf-table-sort-menu">
+  <paper-dropdown-menu label="Sort by" title="Sort by" class="threshold-dropdown perf-table-sort-menu">
     <paper-listbox class="dropdown-content" selected="{{selectedFeatureSort}}" attr-for-selected="name">
       <template is="dom-repeat" items="[[getFeatureSortBy(modelType, multiClass)]]">
         <paper-item name="[[item]]">[[item]]</paper-item>
@@ -2013,27 +2017,27 @@
 </div>
 <div class="perf-table-header">
   <div class="perf-table-arrow"></div>
-  <div class="perf-table-val">Feature Value</div>
-  <div class="perf-table-count">Count</div>
-  <div class$="[[getPerfTableModelClass(numModels)]]">Model</div>
-  <div class="perf-table-acc">Accuracy</div>
+  <div class="perf-table-val" title="Feature or slice value">Feature Value</div>
+  <div class="perf-table-count" title="Number of datapoints in slice">Count</div>
+  <div class$="[[getPerfTableModelClass(numModels)]]" title="Model description">Model</div>
+  <div class="perf-table-acc" title="Accuracy on slice">Accuracy</div>
 </div>
 <div class="perf-table-entries-holder">
   <template is="dom-repeat" items="[[featureValueThresholds]]" as="featureValueThreshold">
     <div class="perf-table-entry">
       <div class$="[[getPerfTableRowClass(featureValueThreshold.opened)]]" data-index$="[[index]]">
         <div class="perf-table-arrow">
-          <paper-icon-button class$="[[getExpandCollapsePerfIconClass(featureValueThreshold.opened)]]" icon="arrow-drop-down" on-tap="togglePerfRow"></paper-icon-button>
+          <paper-icon-button class$="[[getExpandCollapsePerfIconClass(featureValueThreshold.opened)]]" icon="arrow-drop-down" on-tap="togglePerfRow" title="Click to expand or collapse"></paper-icon-button>
         </div>
-        <div class="perf-table-val perf-table-clickable perf-table-text-entry" on-tap="togglePerfRow">[[getPrintableValue_(featureValueThreshold)]]</div>
-        <div class="perf-table-count perf-table-num-entry perf-table-clickable perf-table-text-entry" on-tap="togglePerfRow">
+        <div class="perf-table-val perf-table-clickable perf-table-text-entry" on-tap="togglePerfRow" title="Feature or slice value">[[getPrintableValue_(featureValueThreshold)]]</div>
+        <div class="perf-table-count perf-table-num-entry perf-table-clickable perf-table-text-entry" on-tap="togglePerfRow" title="Number of datapoints in slice">
           [[getMultiClassFeatureValueCount(inferenceStats_, featureValueThreshold)]]</div>
           <div class$="[[getPerfTableModelClass(numModels)]]" on-tap="togglePerfRow">
             <template is="dom-repeat" items="{{featureValueThreshold.threshold}}">
-              <div class="perf-table-text-entry perf-table-clickable">[[getModelName_(index)]]</div>
+              <div class="perf-table-text-entry perf-table-clickable" title="Model description">[[getModelName_(index)]]</div>
             </template>
           </div>
-          <div class="perf-table-acc perf-table-clickable" on-tap="togglePerfRow">
+          <div class="perf-table-acc perf-table-clickable" on-tap="togglePerfRow" title="Accuracy on slice">
             <template is="dom-repeat" items="{{featureValueThreshold.threshold}}">
               <div class="perf-table-text-entry perf-table-num-entry">
                 [[getMultiClassAccuracyModelIndex(inferenceStats_, index, featureValueThreshold)]]
@@ -2047,7 +2051,7 @@
           <div>
             <template is="dom-if" if="[[shouldShowFeaturePrCharts_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]">
               <div class="conf-matrix-holder">
-                <div class="conf-text">Confusion matrix</div>
+                <div class="conf-text" title="Confusion Matrix">Confusion matrix</div>
                 <template is="dom-repeat" items="[[inferenceStats_]]" as="inferenceStat">
                   <tf-confusion-matrix counts="[[getMultiClassConfMatrix(inferenceStats_, index, featureValueThreshold)]]"
                   label="[[getConfusionMatrixLabel(index, numModels)]]"
@@ -2068,16 +2072,16 @@
         <div class="perf-table-arrow">
           <paper-icon-button icon="arrow-drop-down" on-tap="togglePerfRow" disabled></paper-icon-button>
         </div>
-        <div class="perf-table-val perf-table-text-entry">All datapoints</div>
-        <div class="perf-table-count perf-table-num-entry">
+        <div class="perf-table-val perf-table-text-entry" title="Feature or slice value">All datapoints</div>
+        <div class="perf-table-count perf-table-num-entry" title="Number of datapoints in slice">
           [[getMultiClassFeatureValueCount(inferenceStats_)]]
         </div>
-        <div class$="[[getPerfTableModelClass(numModels)]]">
+        <div class$="[[getPerfTableModelClass(numModels)]]" title="Model Description">
           <template is="dom-repeat" items="{{overallThresholds}}">
             <div class="perf-table-text-entry">[[getModelName_(index)]]</div>
           </template>
         </div>
-        <div class="perf-table-acc">
+        <div class="perf-table-acc" title="Accuracy">
           <template is="dom-repeat" items="[[inferenceStats_]]" as="inferenceStat">
             <div class="perf-table-text-entry perf-table-num-entry">
               [[getMultiClassAccuracyModelIndex(inferenceStats_, index)]]
@@ -2089,7 +2093,7 @@
     <div class="perf-table-entry-expanded flex-row-reverse">
       <template is="dom-if" if="[[shouldShowOverallPrChart_(selectedLabelFeature, selectedBreakdownFeature, inferences)]]">
         <div class="conf-matrix-holder">
-          <div class="conf-text">Confusion matrix</div>
+          <div class="conf-text" title="Confusion matrix">Confusion matrix</div>
           <template is="dom-repeat" items="[[inferenceStats_]]" as="inferenceStat">
             <tf-confusion-matrix counts="[[getMultiClassConfMatrix(inferenceStats_, index)]]"
             label="[[getConfusionMatrixLabel(index, numModels)]]"
@@ -2107,7 +2111,7 @@
 <template is="dom-if" if="[[isRegression_(modelType)]]" restamp>
   <div class="perf-table-title-row">
     <div class="flex">
-      <div class="perf-table-title">[[getNoThresholdPerfTableTitle(selectedBreakdownFeature, selectedSecondBreakdownFeature, featureValueThresholds)]]</div>
+      <div class="perf-table-title" title="Explore regression performance">[[getNoThresholdPerfTableTitle(selectedBreakdownFeature, selectedSecondBreakdownFeature, featureValueThresholds)]]</div>
       <paper-icon-button icon="info-outline" class="info-icon performance-info-icon no-padding" on-tap="openDialog">
       </paper-icon-button>
       <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
@@ -2116,7 +2120,7 @@
         <div>Slice the dataset and explore model performance by slice.</div>
       </paper-dialog>
     </div>
-    <paper-dropdown-menu label="Sort by" class="threshold-dropdown perf-table-sort-menu">
+    <paper-dropdown-menu label="Sort by" class="threshold-dropdown perf-table-sort-menu" title="Sort slices by">
       <paper-listbox class="dropdown-content" selected="{{selectedFeatureSort}}" attr-for-selected="name">
         <template is="dom-repeat" items="[[getFeatureSortBy(modelType, multiClass)]]">
           <paper-item name="[[item]]">[[item]]</paper-item>
@@ -2126,28 +2130,28 @@
   </div>
   <div class="perf-table-header">
     <div class="perf-table-arrow"></div>
-    <div class="perf-table-val">Feature Value</div>
-    <div class="perf-table-count">Count</div>
-    <div class="perf-table-error">Mean error</div>
-    <div class="perf-table-error">Mean absolute error</div>
-    <div class="perf-table-sq-error">Mean squared error</div>
+    <div class="perf-table-val" title="Feature or slice value">Feature Value</div>
+    <div class="perf-table-count" title="Number of datapoints in slice">Count</div>
+    <div class="perf-table-error" title="Mean Error">Mean error</div>
+    <div class="perf-table-error" title="Mean Absolute Error">Mean absolute error</div>
+    <div class="perf-table-sq-error" title="Mean Squared Error">Mean squared error</div>
   </div>
   <div class="perf-table-entries-holder">
     <template is="dom-repeat" items="[[regressionEntries_]]">
       <div class="perf-table-entry">
         <div class="perf-table-row">
           <div class="perf-table-arrow"></div>
-          <div class="perf-table-val perf-table-text-entry">[[item.name]]</div>
-          <div class="perf-table-count perf-table-num-entry perf-table-text-entry">
+          <div class="perf-table-val perf-table-text-entry" title="Feature or slice value">[[item.name]]</div>
+          <div class="perf-table-count perf-table-num-entry perf-table-text-entry" title="Number of datapoints in slice">
             [[item.count]]
           </div>
-          <div class="perf-table-error perf-table-num-entry perf-table-text-entry">
+          <div class="perf-table-error perf-table-num-entry perf-table-text-entry" title="Mean error on slice">
             [[formatError(item.meanError)]]
           </div>
-          <div class="perf-table-error perf-table-num-entry perf-table-text-entry">
+          <div class="perf-table-error perf-table-num-entry perf-table-text-entry" title="Mean absolute error on slice">
             [[formatError(item.meanAbsError)]]
           </div>
-          <div class="perf-table-sq-error perf-table-num-entry perf-table-text-entry">
+          <div class="perf-table-sq-error perf-table-num-entry perf-table-text-entry" title="Mean squared error on slice">
             [[formatError(item.meanSquaredError)]]
           </div>
         </div>
@@ -2157,7 +2161,7 @@
 </template>
 </div>
 </div>
-<div class="stats-tab">
+<div class="stats-tab" title="Aggregate statistics feature over feature">
   <facets-overview id="overview" search-string="{{featureSearchValue}}"></facets-overview>
 </div>
 </iron-pages>
