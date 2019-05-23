@@ -482,8 +482,8 @@
       }
       
       .control-button[disabled] {
-        color: #5f6368;
-        background-color: #f4f4f4;
+        color: #BDC1C6;
+        background-color: #ffffff;
       }
       
       .main-button {
@@ -498,9 +498,9 @@
       }
       
       .main-button[disabled] {
-        background-color: lightgray;
-        border: 1px solid lightgray;
-        color: gray;
+        background-color: ffffff;
+        border: 1px solid #E8EAED;
+        color: #BDC1C6;
       }
       
       .optimize-threshold-button {
@@ -1178,7 +1178,7 @@
       }
       .datapoint-button {
         color: #202124;
-        background: #FDE293;
+        /* background: #FDE293; */
         border: none;
       }
       .infer-button {
@@ -1355,7 +1355,8 @@
                   <div class="model-selection">
                     <paper-dropdown-menu label="Dinosaur Mods" 
                     title="Specify which model to show counterfactual for"
-                    class="threshold-dropdown">
+                    class="threshold-dropdown"
+                    disabled$="[[!hasSelected(selectedExampleAndInference)]]">
                       <paper-listbox slot="dropdown-content" class="dropdown-content" selected="1">
                         <paper-item>allosaurus</paper-item>
                         <paper-item>brontosaurus</paper-item>
@@ -1364,8 +1365,8 @@
                   </div>
                   <div class="metric-selection">
                     <paper-radio-group selected="{{nearestCounterfactualDist}}">
-                      <paper-radio-button class="cf-distance-type no-padding" name="L1" title="Use L1 distance to compute counterfactual">L1</paper-radio-button>
-                      <paper-radio-button class="cf-distance-type no-padding" name="L2" title="Use L2 distance to compute counterfactual">L2</paper-radio-button>
+                      <paper-radio-button class="cf-distance-type no-padding" name="L1" title="Use L1 distance to compute counterfactual" disabled$="[[!hasSelected(selectedExampleAndInference)]]">L1</paper-radio-button>
+                      <paper-radio-button class="cf-distance-type no-padding" name="L2" title="Use L2 distance to compute counterfactual" disabled$="[[!hasSelected(selectedExampleAndInference)]]">L2</paper-radio-button>
                     </paper-radio-group>
                     <paper-icon-button icon="info-outline" class="cf-info-icon no-padding" on-tap="openDialog">
                     </paper-icon-button>
