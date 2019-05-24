@@ -103,6 +103,7 @@
       
       .compare-inference-viewer {
         border-left: 1px solid var(--wit-color-gray300);
+        background: #E6F4EA;
       }
       
       .tf-option-selector-0 .content-wrapper.tf-option-selector  > * {
@@ -253,7 +254,7 @@
       }
       
       .side-content {
-        padding-left: 5px;
+        padding-left: 4px;
         width: calc(100% - 10px);
         display: flex;
         flex-direction: column;
@@ -627,10 +628,6 @@
         margin-left: 10px;
       }
       
-      /* .counterfactual-button-intro {
-        padding: 7px 0 0 10px;
-      } */
-      
       .main-vertical {
         width: 100%;
       }
@@ -640,8 +637,6 @@
         min-height: 52px;
         flex-grow: 0;
         display: flex;
-        /* box-shadow: 0 2px 5px grey;
-        margin-bottom: 3px; */
         border-bottom: solid 1px #DADCE0;
         justify-content: space-between;
       }
@@ -757,7 +752,7 @@
       }
       
       .viz-switch {
-        margin-bottom: 12px;
+        margin: 6px;
       }
       
       .tooltip {
@@ -937,7 +932,7 @@
       .control-info-header {
         color: #3C4043;
         font-size: 14px;
-        margin: 0px 0px 8px 0px;
+        margin: 2px;
         letter-spacing: 0.25px;
         line-height: 20px;
       }
@@ -950,7 +945,7 @@
         margin: 0px 0px 12px 0px;
         max-width: 460px;
       }
-
+      
       .button-prefix-label {
         margin: 12px 0 0 12px;
         color: #5f6368;
@@ -970,7 +965,7 @@
       }
       
       .main-button.run-button {
-        padding: 5px;
+        padding: 4px;
         flex-grow: 1;
       }
       
@@ -1144,21 +1139,22 @@
       }
       
       .counterfactual-controls {
-        height: 30px;
-        align-items: center;
-        justify-content: space-between;
+        margin: 4px 0px;
+        align-items: baseline;
+        /* justify-content: space-between; */
       }
-
+      
       .counterfactual-toggle {
         --paper-toggle-button-checked-bar-color: #81C995;
+        padding: 4px;
       }
-
+      
       .counterfactual-configure {
         align-items: center;
       }
-
+      
       .metric-selection {
-        margin-right: 24px;
+        margin: 0px 4px;
       }
       
       .cf-distance-type {
@@ -1167,14 +1163,14 @@
         letter-spacing: 0.1px;
         color: #5f6368;
       }
-
+      
       .model-selection {
-        margin-right: 24px;
+        margin: 0px 4px;
       }
-
+      
       .similarity-control {
-        align-items: center;
-        justify-content: space-between;
+        align-items: baseline;
+        /* justify-content: space-between; */
       }
       .datapoint-button {
         color: #202124;
@@ -1285,18 +1281,18 @@
   </paper-radio-group>
   <paper-dropdown-menu label="Visualize as" title="Specify visualization of similarity"
   class="threshold-dropdown distance-vis-dropdown">
-    <paper-listbox class="dropdown-content" selected="{{facetDistSetting}}" attr-for-selected="name">
-      <paper-item name="colorBy">Colored By</paper-item>
-      <paper-item name="horizontalFacet">Bins on X-axis</paper-item>
-      <paper-item name="verticalFacet">Bins on Y-axis</paper-item>
-      <paper-item name="horizontalPosition">Scattered along X-axis</paper-item>
-      <paper-item name="verticalPosition">Scattered along Y-axis</paper-item>
-    </paper-listbox>
-  </paper-dropdown-menu>
-  <div class="buttons">
-    <paper-button dialog-dismiss class="control-button">Cancel</paper-button>
-    <paper-button dialog-confirm autofocus on-tap="addDistanceMetric" class="main-button">Create</paper-button>
-  </div>
+  <paper-listbox class="dropdown-content" selected="{{facetDistSetting}}" attr-for-selected="name">
+    <paper-item name="colorBy">Colored By</paper-item>
+    <paper-item name="horizontalFacet">Bins on X-axis</paper-item>
+    <paper-item name="verticalFacet">Bins on Y-axis</paper-item>
+    <paper-item name="horizontalPosition">Scattered along X-axis</paper-item>
+    <paper-item name="verticalPosition">Scattered along Y-axis</paper-item>
+  </paper-listbox>
+</paper-dropdown-menu>
+<div class="buttons">
+  <paper-button dialog-dismiss class="control-button">Cancel</paper-button>
+  <paper-button dialog-confirm autofocus on-tap="addDistanceMetric" class="main-button">Create</paper-button>
+</div>
 </paper-dialog>
 <div class="dashboard-layout">
   <div class="main-vertical">
@@ -1331,58 +1327,62 @@
               </button>
               <iron-collapse class="card" id="collapsecontexttools" opened="{{openedContextTools}}">
                 <paper-radio-group class="viz-switch" selected="{{visMode}}">
-                  <paper-radio-button class="datapoint-viz-type" name="dive" title="Visualizes loaded datapoints in Facets Dive">Datapoints</paper-radio-button>
+                  <paper-radio-button class="datapoint-viz-type" name="dive" title="Visualizes loaded datapoints in Facets Dive">Facets dive</paper-radio-button>
                   <paper-radio-button class="datapoint-viz-type" name="pd" title="Shows partial dependence plots for all features">Partial dependence plots</paper-radio-button>
                 </paper-radio-group>
                 <template is="dom-if" if="[[!isRegression_(modelType)]]">
                   <div class="flex counterfactual-controls">
-                    <div class="control-info-header">Nearest counterfactual datapoint
-                      <paper-icon-button icon="info-outline" class="cf-info-icon no-padding" on-tap="openDialog">
-                      </paper-icon-button>
-                      <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
-                        <div class="dialog-title"><h2>Nearest Counterfactual to selected datapoint</h2></div>
-                        <div class="dialog-content"><p>Compare a selected datapoint with its nearest neighbor from a different classification as predicted by the model. Customize similarity metric and model (where applicable).</p>
-                        </div>
-                      </paper-dialog>
-                    </div>
                     <paper-toggle-button class="counterfactual-toggle"
                     title ="Shows nearest counterfactual for a selected datapoint"
                     checked="{{showNearestCounterfactual}}"
                     disabled$="[[!hasSelected(selectedExampleAndInference)]]">
                   </paper-toggle-button>
+                  <div class="control-info-header">Nearest counterfactual datapoint
+                    <paper-icon-button icon="info-outline" class="cf-info-icon no-padding" on-tap="openDialog">
+                    </paper-icon-button>
+                    <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
+                      <div class="dialog-title"><h2>Nearest Counterfactual to selected datapoint</h2></div>
+                      <div class="dialog-content"><p>Compare a selected datapoint with its nearest neighbor from a different classification as predicted by the model. Customize similarity metric and model (where applicable).</p>
+                      </div>
+                    </paper-dialog>
+                  </div>
                 </div>
                 <div class="flex counterfactual-configure">
                   <div class="model-selection">
                     <paper-dropdown-menu label="Dinosaur Mods" 
                     title="Specify which model to show counterfactual for"
                     class="threshold-dropdown"
-                    disabled$="[[!hasSelected(selectedExampleAndInference)]]">
-                      <paper-listbox slot="dropdown-content" class="dropdown-content" selected="1">
-                        <paper-item>allosaurus</paper-item>
-                        <paper-item>brontosaurus</paper-item>
-                      </paper-listbox>
-                    </paper-dropdown-menu>
-                  </div>
-                  <div class="metric-selection">
-                    <paper-radio-group selected="{{nearestCounterfactualDist}}">
-                      <paper-radio-button class="cf-distance-type no-padding" name="L1" title="Use L1 distance to compute counterfactual" disabled$="[[!hasSelected(selectedExampleAndInference)]]">L1</paper-radio-button>
-                      <paper-radio-button class="cf-distance-type no-padding" name="L2" title="Use L2 distance to compute counterfactual" disabled$="[[!hasSelected(selectedExampleAndInference)]]">L2</paper-radio-button>
-                    </paper-radio-group>
-                    <paper-icon-button icon="info-outline" class="cf-info-icon no-padding" on-tap="openDialog">
-                    </paper-icon-button>
-                    <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
-                      <div class="dialog-title"><h2>Similarity Distances</h2></div>
-                      <div class="dialog-content"><p><b>L1 Distance</b> The sum of the absolute value of the distance of each feature between two datapoints.
-                        <br><b>L2 Distance</b> The sum of the square of the distance of each feature between two datapoints.</p>
-                      </div>
-                    </paper-dialog>
-                  </div>
-                  
+                    disabled$="[[!hasSelectedAndShowingCounterfactual(selectedExampleAndInference, showNearestCounterfactual)]]">
+                    <paper-listbox slot="dropdown-content" class="dropdown-content" selected="1">
+                      <paper-item>allosaurus</paper-item>
+                      <paper-item>brontosaurus</paper-item>
+                    </paper-listbox>
+                  </paper-dropdown-menu>
                 </div>
-              </template>
-              <div title="Select a datapoint to use this feature">
-                <div class="flex similarity-control">
-                    <div class="control-info-header">Similarity to selected datapoint
+                <div class="metric-selection">
+                  <paper-radio-group selected="{{nearestCounterfactualDist}}">
+                    <paper-radio-button class="cf-distance-type no-padding" name="L1" title="Use L1 distance to compute counterfactual" disabled$="[[!hasSelectedAndShowingCounterfactual(selectedExampleAndInference, showNearestCounterfactual)]]">L1</paper-radio-button>
+                    <paper-radio-button class="cf-distance-type no-padding" name="L2" title="Use L2 distance to compute counterfactual" disabled$="[[!hasSelectedAndShowingCounterfactual(selectedExampleAndInference, showNearestCounterfactual)]]">L2</paper-radio-button>
+                  </paper-radio-group>
+                  <paper-icon-button icon="info-outline" class="cf-info-icon no-padding" on-tap="openDialog">
+                  </paper-icon-button>
+                  <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
+                    <div class="dialog-title"><h2>Similarity Distances</h2></div>
+                    <div class="dialog-content"><p><b>L1 Distance</b> The sum of the absolute value of the distance of each feature between two datapoints.
+                      <br><b>L2 Distance</b> The sum of the square of the distance of each feature between two datapoints.</p>
+                    </div>
+                  </paper-dialog>
+                </div>                
+              </div>
+            </template>
+            <div title="Select a datapoint to use this feature">
+              <div class="flex similarity-control">
+                <paper-icon-button icon="add" class="control-button datapoint-button" disabled$="[[!hasSelected(selectedExampleAndInference)]]"
+                on-tap="showDistanceClicked_" alt="Show similarity to selected datapoint"
+                title="Create a feature representing similarity to selected datapoint">
+              </paper-icon-button>
+              
+              <div class="control-info-header">Similarity to selected datapoint
                 <paper-icon-button icon="info-outline" class="cf-info-icon no-padding" on-tap="openDialog">
                 </paper-icon-button>
                 <paper-dialog class="dialog-text" horizontal-align="auto" vertical-align="auto">
@@ -1392,71 +1392,67 @@
                       This feature is customizable.</p>
                     </div>
                   </paper-dialog>
-                  </div>
-                  <paper-icon-button icon="add" class="control-button datapoint-button" disabled$="[[!hasSelected(selectedExampleAndInference)]]"
-                  on-tap="showDistanceClicked_" alt="Show similarity to selected datapoint"
-                  title="Create a feature representing similarity to selected datapoint">
-                </paper-icon-button>
                 </div>
               </div>
-            </iron-collapse>
-          </div>
-          <div class="heading-and-card editor-heading-and-card">
-            <button class="heading">[[getDatapointEditorTitle(selectedExampleNum, comparedIndices)]]
-            </button>
-            <div class="no-padding-card">
-              <div class="datapoint-controls-holder datapoint-control-buttons-holder">
-                <div class="datapoint-left-controls-holder">
-                  <paper-icon-button class="datapoint-control-button" icon="chevron-left"
-                  disabled$="[[!hasSelected(selectedExampleAndInference)]]"
-                  on-tap="selectPrevDatapoint_" alt="select previous datapoint" title="Select previous datapoint">
-                </paper-icon-button>
-                <paper-icon-button class="datapoint-control-button" icon="chevron-right"
-                disabled$="[[!hasSelected(selectedExampleAndInference)]]"
-                on-tap="selectNextDatapoint_" alt="select next datapoint" title="Select next datapoint">
-              </paper-icon-button>
-              <div title="Edit a datapoint to use this feature">
-                <paper-icon-button class="datapoint-control-button" icon="history"
-                on-tap="resetDatapoint_" alt="undo changes" title="Undo changes"
-                disabled$="[[shouldDisableReset_(selectedExampleAndInference.changed)]]">
-              </paper-icon-button>
             </div>
-            <div title="Select a datapoint to use this feature">
-              <paper-icon-button class="datapoint-control-button" icon="content-copy"
+          </iron-collapse>
+        </div>
+        <div class="heading-and-card editor-heading-and-card">
+          <button class="heading">[[getDatapointEditorTitle(selectedExampleNum, comparedIndices)]]
+          </button>
+          <div class="no-padding-card">
+            <div class="datapoint-controls-holder datapoint-control-buttons-holder">
+              <div class="datapoint-left-controls-holder">
+                <paper-icon-button class="datapoint-control-button" icon="chevron-left"
+                disabled$="[[!hasSelected(selectedExampleAndInference)]]"
+                on-tap="selectPrevDatapoint_" alt="select previous datapoint" title="Select previous datapoint">
+              </paper-icon-button>
+              <paper-icon-button class="datapoint-control-button" icon="chevron-right"
               disabled$="[[!hasSelected(selectedExampleAndInference)]]"
-              on-tap="copyDatapoint_" alt="duplicate datapoint" title="Duplicate datapoint">
+              on-tap="selectNextDatapoint_" alt="select next datapoint" title="Select next datapoint">
+            </paper-icon-button>
+            <div title="Edit a datapoint to use this feature">
+              <paper-icon-button class="datapoint-control-button" icon="history"
+              on-tap="resetDatapoint_" alt="undo changes" title="Undo changes"
+              disabled$="[[shouldDisableReset_(selectedExampleAndInference.changed)]]">
             </paper-icon-button>
           </div>
           <div title="Select a datapoint to use this feature">
-            <paper-icon-button class="datapoint-control-button" icon="delete"
+            <paper-icon-button class="datapoint-control-button" icon="content-copy"
             disabled$="[[!hasSelected(selectedExampleAndInference)]]"
-            on-tap="deleteDatapointDialog_" alt="delete datapoint" title="Delete datapoint">
+            on-tap="copyDatapoint_" alt="duplicate datapoint" title="Duplicate datapoint">
           </paper-icon-button>
         </div>
-        <div class="control-divider"></div>
-        <paper-input value="{{featureSearchValue}}" label="Search features"
-        class="datapoint-control-filter-input feature-search-input"
-        disabled$="[[!hasSelected(selectedExampleAndInference)]]" no-label-float>
-        <iron-icon icon="icons:search" prefix></iron-icon>
-      </paper-input>
-    </div>
-    <div class="datapoint-right-controls-holder">
-    </div>
+        <div title="Select a datapoint to use this feature">
+          <paper-icon-button class="datapoint-control-button" icon="delete"
+          disabled$="[[!hasSelected(selectedExampleAndInference)]]"
+          on-tap="deleteDatapointDialog_" alt="delete datapoint" title="Delete datapoint">
+        </paper-icon-button>
+      </div>
+      <div class="control-divider"></div>
+      <paper-input value="{{featureSearchValue}}" label="Search features"
+      class="datapoint-control-filter-input feature-search-input"
+      disabled$="[[!hasSelected(selectedExampleAndInference)]]" no-label-float>
+      <iron-icon icon="icons:search" prefix></iron-icon>
+    </paper-input>
   </div>
-  <template is="dom-if" if="[[hasSelected(selectedExampleAndInference)]]">
-    <div class="example-and-inference-holder">
-      <vz-example-viewer class="example-holder"
-      json="{{selectedExampleAndInference.example}}"
-      compare-json="{{counterfactualExampleAndInference.example}}"
-      on-example-change="exampleChange_" id="viewer"
-      display-mode="[[exampleDisplayMode]]"
-      feature-search-value="{{featureSearchValue}}"
-      compare-title="[[compareTitle]]"
-      saliency="[[attribution]]"
-      show-saliency
-      readonly="[[!areExamplesEditable_(modelName, inferenceAddress)]]">
-    </vz-example-viewer>
+  <div class="datapoint-right-controls-holder">
   </div>
+</div>
+<template is="dom-if" if="[[hasSelected(selectedExampleAndInference)]]">
+  <div class="example-and-inference-holder">
+    <vz-example-viewer class="example-holder"
+    json="{{selectedExampleAndInference.example}}"
+    compare-json="{{counterfactualExampleAndInference.example}}"
+    on-example-change="exampleChange_" id="viewer"
+    display-mode="[[exampleDisplayMode]]"
+    feature-search-value="{{featureSearchValue}}"
+    compare-title="[[compareTitle]]"
+    saliency="[[attribution]]"
+    show-saliency
+    readonly="[[!areExamplesEditable_(modelName, inferenceAddress)]]">
+  </vz-example-viewer>
+</div>
 </template>
 <template is="dom-if" if="[[!hasSelected(selectedExampleAndInference)]]">
   <div class="datapoint-info-holder">
@@ -1546,7 +1542,7 @@
         <div>For string features, the most popular feature values are shown.
         </div>
         <div>In features with multiple feature values per datapoint, each feature value is shown as a single plot. 
-            If a datapoint contains multiple values for a feature, you can override which feature values to generate plots for by specifying the indices.
+          If a datapoint contains multiple values for a feature, you can override which feature values to generate plots for by specifying the indices.
         </div>
         <div>You can switch to a global view using the toggle. In this mode, the plots show the average effect of repeadtedly 
           changing a single feature across all datapoints. When turned off, the plots show the
@@ -2961,6 +2957,10 @@
       
       hasSelected: function(selectedExampleAndInference) {
         return selectedExampleAndInference != null;
+      },
+      
+      hasSelectedAndShowingCounterfactual: function(selectedExampleAndInference, showNearestCounterfactual) {
+        return this.hasSelected(selectedExampleAndInference) && showNearestCounterfactual; 
       },
       
       getFeatureList_: function(stats) {
